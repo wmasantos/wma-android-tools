@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Options">
+        <attr name="elapsedTimeColor" format="color" />
+        <attr name="totalTimeColor" format="color"/>
+        <attr name="progress" format="integer"/>
+        <attr name="backgroundContainer" format="integer"/>
+        <attr name="audioTitle" format="string"/>
+        <attr name="deleteTrack" format="boolean"/>
+        <attr name="downloadTrack" format="boolean"/>
+        <attr name="backToBegin" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="Record">
+        <attr name="recDimensions" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="Video">
+        <attr name="heightDimension" format="dimension"/>
+        <attr name="enableBack" format="boolean"/>
+        <attr name="startOnLoad" format="boolean"/>
+    </declare-styleable>
+</resources>

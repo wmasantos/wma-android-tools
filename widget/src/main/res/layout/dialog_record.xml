@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:padding="10dp"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textColor="#404040"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:id="@+id/tvTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:padding="2dp"
+        android:textColor="#616161"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/ivRec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_blue"
+        android:src="@drawable/ic_mic"
+        android:padding="12dp"
+        android:clickable="true"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="right">
+
+        <TextView
+            android:id="@+id/tvCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CANCELAR"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:layout_marginRight="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/selector_primary_link"
+            android:clickable="true"/>
+
+    </LinearLayout>
+
+</LinearLayout>

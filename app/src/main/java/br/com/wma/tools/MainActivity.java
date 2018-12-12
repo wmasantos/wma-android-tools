@@ -1,13 +1,28 @@
 package br.com.wma.tools;
 
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import java.io.File;
+
+import br.com.wma.tools.widget.WMAAudioView;
+
 public class MainActivity extends AppCompatActivity {
+
+    private WMAAudioView wmaAudioView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        wmaAudioView = findViewById(R.id.avAudioView);
+        wmaAudioView.readyToPlayForStreamAsync(
+                this,
+                "https://s3-us-west-2.amazonaws.com/smn-mobile/cdp-desenv/Through+The+Fire+And+Flames.mp3",
+                new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/SMNTools/Audios")
+        );
+        wmaAudioView.setAudioTitle("Som Foda!");
     }
 }

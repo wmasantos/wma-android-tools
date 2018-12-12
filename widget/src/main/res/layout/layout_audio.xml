@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llAudioLayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_audio_view">
+
+    <TextView
+        android:id="@+id/tvAudioTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="XXX"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:ellipsize="end"
+        android:maxLines="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/ivPlayPause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_play"
+                android:padding="5dp"
+                android:clickable="true"/>
+
+            <ImageView
+                android:id="@+id/ivReload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_reload"
+                android:padding="5dp"
+                android:visibility="gone"
+                android:clickable="true"/>
+
+            <ProgressBar
+                android:id="@+id/pbLoadAudioPlay"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:padding="5dp"
+                android:visibility="gone"
+                android:layout_gravity="center"/>
+
+        </FrameLayout>
+
+        <SeekBar
+            android:id="@+id/skTimeLine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:thumb="@drawable/custom_thumb"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivDownloadTrack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:clickable="true"
+                android:src="@drawable/selector_download"
+                android:visibility="gone"/>
+
+            <FrameLayout
+                android:id="@+id/llDownloadContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvDownloadPercent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="8sp"
+                    android:text="0"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:layout_gravity="center"/>
+
+                <ProgressBar
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:visibility="visible"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/ivDeleteTrack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:clickable="true"
+            android:src="@drawable/selector_delete_track"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:id="@+id/tvTimeElapsed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="00:00"
+            android:layout_marginLeft="40dp"/>
+
+        <TextView
+            android:id="@+id/tvTotalTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="00:00"
+            android:gravity="right"
+            android:layout_marginRight="10dp"/>
+    </LinearLayout>
+
+</LinearLayout>
