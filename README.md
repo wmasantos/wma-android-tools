@@ -1,9 +1,9 @@
 # WMA Android Tools
-## 1 - WMAAudioView
+
+[1 - WMAAudioView](#WMAAudioView)
 
 ## WMAAudioView
 Fornece um componente de áudio completo e pronto para executar faixas de áudio em MP3
-
 
 ### XML
 ```xml
