@@ -1,5 +1,6 @@
 package br.com.wma.tools.widget;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -7,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -44,6 +46,7 @@ public class WMAAudioView extends LinearLayout {
     private boolean backToBegin;
     private Context context;
     private File downloadPath;
+    private Activity activity;
 
     public WMAAudioView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -106,7 +109,7 @@ public class WMAAudioView extends LinearLayout {
                     }
                 }
                 else
-                    Toast.makeText(getContext(), "Precisa de permissão para manipular arquivos", Toast.LENGTH_LONG).show();
+                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
             }
         });
 
@@ -170,7 +173,7 @@ public class WMAAudioView extends LinearLayout {
         return wmaAudio;
     }
 
-    private void loadSMNAudio(final Activity activity) {
+    private void loadSMNAudio() {
 
         tvTotalTime.setText(wmaAudio.getFormatedTotalTime());
         skTimeLine.setMax(wmaAudio.getMediaPlayer().getDuration());
@@ -222,56 +225,16 @@ public class WMAAudioView extends LinearLayout {
     }
 
     /**
-     * Método síncrono que carrega uma view de audio por stream de dados, a view geralmente aparece após o audio ser carregado pelo buffer e estiver pronto para execução
-     * @param activity referência de contexto para onde o audio será apresentado
-     * @param urlStream URL do audio para ser reproduzido
-     * @param downloadPath Informando um diretório no parametro será onde o audio será salvo caso iniciado um download, se passado nulo, mesmo habilitando o icone de download ele desaparecerá na view
-     */
-    public void readyToPlayForStream(@NonNull final Activity activity, @NonNull String urlStream, File downloadPath){
-        this.urlStream = urlStream;
-        this.downloadPath = downloadPath;
-
-        if(downloadPath == null)
-            ivDownloadTrack.setVisibility(View.GONE);
-        else {
-            if(WMAUtilities.checkIfStreamFileExistOnDisk(this.urlStream, this.downloadPath))
-                ivDownloadTrack.setImageResource(R.drawable.ic_check);
-        }
-
-        this.wmaAudio = new WMAAudio();
-
-        wmaAudio.readyToPlayForStream(urlStream, new OnPlayerEventListener() {
-            @Override
-            public void onAudioReady(int i, String s) {
-                loadSMNAudio(activity);
-            }
-
-            @Override
-            public void onPlayingComplete() {
-                if(backToBegin){
-                    wmaAudio.getMediaPlayer().seekTo(0);
-                    skTimeLine.setProgress(0);
-                    ivPlayPause.setImageResource(R.drawable.ic_play);
-                    tvTimeElapsed.setText("00:00");
-                }
-            }
-
-            @Override
-            public void onAudioReadyError(Exception e) {
-
-            }
-        });
-    }
-
-    /**
      * Método assíncrono que carrega uma view de audio por stream de dados, a view aparece com um loading e aguarda até que o áudio esteja pronto para executar
      * @param activity referência de contexto para onde o audio será apresentado
      * @param urlStream URL do audio para ser reproduzido
      * @param downloadPath Informando um diretório no parametro será onde o audio será salvo caso iniciado um download, se passado nulo, mesmo habilitando o icone de download ele desaparecerá na view
+     * @param onPlayerEventListener Listener que joga para o desenvolvedor os eventos que acontecem no player caso seja necessário um tratamento adicional.
      */
-    public void readyToPlayForStreamAsync(@NonNull final Activity activity, @NonNull String urlStream, File downloadPath){
+    public void readyToPlayForStreamAsync(Activity activity, @NonNull String urlStream, File downloadPath, final OnPlayerEventListener onPlayerEventListener){
         this.urlStream = urlStream;
         this.downloadPath = downloadPath;
+        this.activity = activity;
 
         if(downloadPath == null)
             ivDownloadTrack.setVisibility(View.GONE);
@@ -282,57 +245,12 @@ public class WMAAudioView extends LinearLayout {
 
         this.wmaAudio = new WMAAudio();
 
-        new AsyncLoadAudio(activity).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new AsyncLoadAudio(onPlayerEventListener).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         ivReload.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AsyncLoadAudio(activity).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            }
-        });
-    }
-
-    /**
-     * Método síncrono que carrega uma view de audio por stream de dados, a view geralmente aparece após o audio ser carregado pelo buffer e estiver pronto para execução.
-     * @param activity referência de contexto para onde o audio será apresentado.
-     * @param urlStream URL do audio para ser reproduzido.
-     * @param downloadPath Informando um diretório no parametro será onde o audio será salvo caso iniciado um download, se passado nulo, mesmo habilitando o icone de download ele desaparecerá na view
-     * @param onPlayerEventListener Listener que joga para o desenvolvedor os eventos que acontecem no player caso seja necessário um tratamento adicional.
-     */
-    public void readyToPlayForStream(@NonNull final Activity activity, @NonNull String urlStream, File downloadPath, final OnPlayerEventListener onPlayerEventListener){
-        this.urlStream = urlStream;
-        this.downloadPath = downloadPath;
-
-        if(downloadPath == null)
-            ivDownloadTrack.setVisibility(View.GONE);
-        else {
-            if(WMAUtilities.checkIfStreamFileExistOnDisk(this.urlStream, this.downloadPath))
-                ivDownloadTrack.setImageResource(R.drawable.ic_check);
-        }
-
-        this.wmaAudio = new WMAAudio();
-
-        wmaAudio.readyToPlayForStream(urlStream, new OnPlayerEventListener() {
-            @Override
-            public void onAudioReady(int i, String s) {
-                loadSMNAudio(activity);
-                onPlayerEventListener.onAudioReady(i, s);
-            }
-
-            @Override
-            public void onPlayingComplete() {
-                if(backToBegin){
-                    wmaAudio.getMediaPlayer().seekTo(0);
-                    skTimeLine.setProgress(0);
-                    ivPlayPause.setImageResource(R.drawable.ic_play);
-                    tvTimeElapsed.setText("00:00");
-                }
-                onPlayerEventListener.onPlayingComplete();
-            }
-
-            @Override
-            public void onAudioReadyError(Exception e) {
-                onPlayerEventListener.onAudioReadyError(e);
+                new AsyncLoadAudio(onPlayerEventListener).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
     }
@@ -359,11 +277,11 @@ public class WMAAudioView extends LinearLayout {
     }
 
     private class AsyncLoadAudio extends AsyncTask<Void, Void, Void> {
-        private Activity activity;
+        private OnPlayerEventListener onPlayerEventListener;
         private AudioPropertiesEntity audioPropertiesEntity;
 
-        public AsyncLoadAudio(Activity activity) {
-            this.activity = activity;
+        public AsyncLoadAudio(OnPlayerEventListener onPlayerEventListener) {
+            this.onPlayerEventListener = onPlayerEventListener;
         }
 
         @Override
@@ -381,10 +299,19 @@ public class WMAAudioView extends LinearLayout {
         protected Void doInBackground(Void... voids) {
             wmaAudio.readyToPlayForStream(urlStream, new OnPlayerEventListener() {
                 @Override
-                public void onAudioReady(int i, String s) {
+                public void onAudioReady(final int i, final String s) {
                     audioPropertiesEntity.setStatusProgress(1);
                     audioPropertiesEntity.setTotalTime(i);
                     audioPropertiesEntity.setTotalTimeFormatted(s);
+
+                    if(onPlayerEventListener != null){
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                onPlayerEventListener.onAudioReady(i, s);
+                            }
+                        });
+                    }
 
                     publishProgress(null);
                 }
@@ -393,13 +320,31 @@ public class WMAAudioView extends LinearLayout {
                 public void onPlayingComplete() {
                     audioPropertiesEntity.setStatusProgress(2);
 
+                    if(onPlayerEventListener != null){
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                onPlayerEventListener.onPlayingComplete();
+                            }
+                        });
+                    }
+
                     publishProgress(null);
                 }
 
                 @Override
-                public void onAudioReadyError(Exception e) {
+                public void onAudioReadyError(final Exception e) {
                     audioPropertiesEntity.setStatusProgress(3);
                     audioPropertiesEntity.setE(e);
+
+                    if(onPlayerEventListener != null){
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                onPlayerEventListener.onAudioReadyError(e);
+                            }
+                        });
+                    }
 
                     publishProgress(null);
                 }
@@ -423,7 +368,7 @@ public class WMAAudioView extends LinearLayout {
                     ivPlayPause.setVisibility(View.VISIBLE);
                     ivReload.setVisibility(View.GONE);
 
-                    loadSMNAudio(activity);
+                    loadSMNAudio();
                     break;
                 }
 

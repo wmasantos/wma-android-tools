@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
         wmaAudioView.readyToPlayForStreamAsync(
                 this,
                 "https://s3-us-west-2.amazonaws.com/smn-mobile/cdp-desenv/Through+The+Fire+And+Flames.mp3",
-                new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/SMNTools/Audios")
+                new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/WMATools/Audios"),
+                null
         );
         wmaAudioView.setAudioTitle("Som Foda!");
         wmaAudioView.addDeleteEvent(new OnDeleteEventListener() {

@@ -5,6 +5,14 @@
 ## WMAAudioView
 Fornece um componente de áudio completo e pronto para executar faixas de áudio em MP3
 
+### Permissões
+Antes de user, precisa liberar as permissões.
+```xml
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.INTERNET"/>
+```
+
 ### XML
 ```xml
 <LinearLayout
