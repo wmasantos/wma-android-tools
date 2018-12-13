@@ -111,7 +111,7 @@ public class WMAUtilities {
         }
     }
 
-    public static boolean checkIfStreamFileExistOnDisk(String urlStream, File dir){
+    public static File checkIfStreamFileExistOnDisk(String urlStream, File dir){
         String filename = urlStream.substring(urlStream.lastIndexOf("/") + 1, urlStream.length());
 
         File aux;
@@ -121,12 +121,12 @@ public class WMAUtilities {
         else if(dir.exists() && dir.isFile())
             aux = new File(dir.getParent() + "/" + filename);
         else
-            return false;
+            return null;
 
         if(aux.exists())
-            return true;
-
-        return false;
+            return aux;
+        else
+            return null;
     }
 
     public static Bitmap base64ToBitmap(String base64Str) throws IllegalArgumentException {

@@ -47,6 +47,7 @@ public class WMAAudioView extends LinearLayout {
     private Context context;
     private File downloadPath;
     private Activity activity;
+    private OnPlayerEventListener onPlayerEventListener;
 
     public WMAAudioView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -98,7 +99,7 @@ public class WMAAudioView extends LinearLayout {
             @Override
             public void onClick(View view) {
                 if(WMAUtilities.isStoragePermissionGranted(getContext())){
-                    if(WMAUtilities.checkIfStreamFileExistOnDisk(urlStream, downloadPath))
+                    if(WMAUtilities.checkIfStreamFileExistOnDisk(urlStream, downloadPath) != null)
                         Toast.makeText(getContext(), "Arquivo já existe em: " + downloadPath.getAbsolutePath(), Toast.LENGTH_LONG).show();
                     else{
                         try {
@@ -229,18 +230,23 @@ public class WMAAudioView extends LinearLayout {
      * @param activity referência de contexto para onde o audio será apresentado
      * @param urlStream URL do audio para ser reproduzido
      * @param downloadPath Informando um diretório no parametro será onde o audio será salvo caso iniciado um download, se passado nulo, mesmo habilitando o icone de download ele desaparecerá na view
+     *                     após fazer o download, o player passa a utilizar o arquivo em disco como saída.
      * @param onPlayerEventListener Listener que joga para o desenvolvedor os eventos que acontecem no player caso seja necessário um tratamento adicional.
      */
-    public void readyToPlayForStreamAsync(Activity activity, @NonNull String urlStream, File downloadPath, final OnPlayerEventListener onPlayerEventListener){
+    public void readyToPlayForStreamAsync(Activity activity, @NonNull String urlStream, File downloadPath, OnPlayerEventListener onPlayerEventListener){
         this.urlStream = urlStream;
         this.downloadPath = downloadPath;
         this.activity = activity;
+        this.onPlayerEventListener = onPlayerEventListener;
 
         if(downloadPath == null)
             ivDownloadTrack.setVisibility(View.GONE);
         else {
-            if(WMAUtilities.checkIfStreamFileExistOnDisk(this.urlStream, this.downloadPath))
+            File localFile = WMAUtilities.checkIfStreamFileExistOnDisk(this.urlStream, this.downloadPath);
+            if(localFile != null) {
                 ivDownloadTrack.setImageResource(R.drawable.ic_check);
+                this.urlStream = localFile.getAbsolutePath();
+            }
         }
 
         this.wmaAudio = new WMAAudio();
@@ -250,7 +256,7 @@ public class WMAAudioView extends LinearLayout {
         ivReload.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AsyncLoadAudio(onPlayerEventListener).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                new AsyncLoadAudio(WMAAudioView.this.onPlayerEventListener).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
     }
@@ -461,6 +467,7 @@ public class WMAAudioView extends LinearLayout {
                     ivDownloadTrack.setImageResource(R.drawable.ic_check);
 
                     Toast.makeText(getContext(), "Download completed.", Toast.LENGTH_LONG).show();
+
                     break;
                 }
 
