@@ -7,6 +7,7 @@ import android.os.Bundle;
 import java.io.File;
 
 import br.com.wma.tools.widget.WMAAudioView;
+import br.com.wma.tools.widget.interfaces.OnDeleteEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,5 +25,11 @@ public class MainActivity extends AppCompatActivity {
                 new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/SMNTools/Audios")
         );
         wmaAudioView.setAudioTitle("Som Foda!");
+        wmaAudioView.addDeleteEvent(new OnDeleteEventListener() {
+            @Override
+            public void onDelete() {
+                System.out.println("Captura o clique na lixeira!");
+            }
+        });
     }
 }

@@ -1,7 +1,9 @@
 # WMA Android Tools
+## 1 - WMAAudioView
 
 ## WMAAudioView
 Fornece um componente de áudio completo e pronto para executar faixas de áudio em MP3
+
 
 ### XML
 ```xml
@@ -31,12 +33,28 @@ Fornece um componente de áudio completo e pronto para executar faixas de áudio
 </LinearLayout>
 ```
 
-```
-audio:elapsedTimeColor="#000000" -> Cor em hexadecimal
-audio:totalTimeColor="#000000" -> Cor em hexadecimal
-audio:backgroundContainer="@drawable/shape_audio" -> Container de fundo do componente
-audio:audioTitle="Nome da Musica" -> Título da Faixa de áudio
-audio:deleteTrack="true" -> Faz a lixeira aparecer, precisa implementar o método onDelete
-audio:downloadTrack="true" -> Aparece o botão de baixar faixa, necessário informar destino
-audio:backToBegin="true" -> Volta ao começo, quando o áudio termina
+audio:elapsedTimeColor => Cor em hexadecimal
+audio:totalTimeColor => Cor em hexadecimal
+audio:backgroundContainer => Container de fundo do componente, pode ser um shape
+audio:audioTitle => Título da Faixa de áudio
+audio:deleteTrack => true ou false, faz a lixeira aparecer, precisa implementar o método onDelete
+audio:downloadTrack => true ou false, aparece o botão de baixar faixa de áudio, necessário informar pasta de destino para o download
+audio:backToBegin => true ou false, volta ao começo, quando o áudio termina.
+
+### Java
+```java
+WMAAudioView wmaAudioView;
+wmaAudioView = findViewById(R.id.avAudioView);
+wmaAudioView.readyToPlayForStreamAsync(
+        Activity,
+        "URL STREM DA FAIXA DE AUDIO",
+        new File("CAMINHO PARA SALVAR FICHEIRO")
+);
+wmaAudioView.setAudioTitle("Som Foda!");
+wmaAudioView.addDeleteEvent(new OnDeleteEventListener() {
+    @Override
+    public void onDelete() {
+        System.out.println("Captura o clique na lixeira!");
+    }
+});
 ```
