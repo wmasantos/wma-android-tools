@@ -75,6 +75,7 @@ wmaAudioView.readyToPlayForStreamAsync(
         }
 );
 wmaAudioView.setAudioTitle("Som Foda!");
+// Chamada necessária para poder capturar o evento de click no icone de remoção.
 wmaAudioView.addDeleteEvent(new OnDeleteEventListener() {
     @Override
     public void onDelete() {
