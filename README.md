@@ -8,7 +8,7 @@ Fornece um componente de áudio completo e pronto para executar faixas de áudio
 <img src="https://github.com/wmasantos/wma-android-tools/blob/master/WMAAudioView.jpg"/>
 
 ### Permissões
-Antes de user, precisa liberar as permissões.
+Antes de usá-la, precisa liberar as permissões.
 ```xml
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
