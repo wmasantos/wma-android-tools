@@ -5,6 +5,8 @@
 ## WMAAudioView
 Fornece um componente de áudio completo e pronto para executar faixas de áudio em MP3
 
+<img src="https://github.com/wmasantos/wma-android-tools/blob/master/WMAAudioView.jpg"/>
+
 ### Permissões
 Antes de user, precisa liberar as permissões.
 ```xml
