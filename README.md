@@ -56,7 +56,23 @@ wmaAudioView = findViewById(R.id.avAudioView);
 wmaAudioView.readyToPlayForStreamAsync(
         Activity,
         "URL STREM DA FAIXA DE AUDIO",
-        new File("CAMINHO PARA SALVAR FICHEIRO")
+        new File("CAMINHO PARA SALVAR FICHEIRO"),
+        new OnPlayerEventListener() {
+            @Override
+            public void onAudioReady(int duration, String totalTime) {
+                System.out.println("Traz a duração total e a duração formatada");
+            }
+
+            @Override
+            public void onPlayingComplete() {
+                System.out.println("Invocado quando o player termina de tocar");
+            }
+
+            @Override
+            public void onAudioReadyError(Exception e) {
+                System.out.println("Lança a exceção quando algo errado ocorrer");
+            }
+        }
 );
 wmaAudioView.setAudioTitle("Som Foda!");
 wmaAudioView.addDeleteEvent(new OnDeleteEventListener() {

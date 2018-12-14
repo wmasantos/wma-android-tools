@@ -18,6 +18,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // 1 - WMAAudioView
+        loadWMAAudioView();
+    }
+
+    private final void loadWMAAudioView(){
         wmaAudioView = findViewById(R.id.avAudioView);
         wmaAudioView.readyToPlayForStreamAsync(
                 this,
@@ -25,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
                 new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/WMATools/Audios"),
                 null
         );
+
         wmaAudioView.setAudioTitle("Som Foda!");
+
         wmaAudioView.addDeleteEvent(new OnDeleteEventListener() {
             @Override
             public void onDelete() {
