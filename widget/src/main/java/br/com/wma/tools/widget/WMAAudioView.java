@@ -170,13 +170,9 @@ public class WMAAudioView extends LinearLayout {
         this.skTimeLine = skTimeLine;
     }
 
-    public WMAAudio getWmaAudio() {
-        return wmaAudio;
-    }
-
     private void loadSMNAudio() {
 
-        tvTotalTime.setText(wmaAudio.getFormatedTotalTime());
+        tvTotalTime.setText(wmaAudio.getFormattedTime());
         skTimeLine.setMax(wmaAudio.getMediaPlayer().getDuration());
 
         skTimeLine.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

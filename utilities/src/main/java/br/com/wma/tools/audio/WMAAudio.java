@@ -2,7 +2,6 @@ package br.com.wma.tools.audio;
 
 import android.media.MediaPlayer;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,40 +18,6 @@ public class WMAAudio {
         mediaPlayer = new MediaPlayer();
     }
 
-    public void readyToPlay(File audioFile, final OnPlayerEventListener onPlayerEventListener){
-        try {
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(audioFile.getAbsolutePath());
-            mediaPlayer.prepare();
-
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    int duration = mediaPlayer.getDuration();
-
-                    String totalTime = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(duration), TimeUnit.MILLISECONDS.toSeconds(duration) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
-
-                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            mp.pause();
-                            if(timer != null)
-                                timer.cancel();
-
-                            mp.seekTo(0);
-                            onPlayerEventListener.onPlayingComplete();
-                        }
-                    });
-
-                    onPlayerEventListener.onAudioReady(mediaPlayer.getDuration(), totalTime);
-                }
-            });
-        } catch (IOException e) {
-            onPlayerEventListener.onAudioReadyError(e);
-        }
-    }
-
     public void readyToPlayForStream(String audioFile, final OnPlayerEventListener onPlayerEventListener){
         try {
             mediaPlayer = new MediaPlayer();
@@ -64,8 +29,7 @@ public class WMAAudio {
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     int duration = mediaPlayer.getDuration();
 
-                    String totalTime = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(duration), TimeUnit.MILLISECONDS.toSeconds(duration) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
+                    String totalTime = getFormattedDurationTime(duration);
 
                     mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
@@ -106,10 +70,7 @@ public class WMAAudio {
             public void run() {
                 int currentPosition = mediaPlayer.getCurrentPosition();
 
-                String formatedTime = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(currentPosition), TimeUnit.MILLISECONDS.toSeconds(currentPosition) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(currentPosition)));
-
-                onAudioPlayingListener.onPlaying(currentPosition, formatedTime);
+                onAudioPlayingListener.onPlaying(currentPosition, getFormattedDurationTime(currentPosition));
             }
         }, 0, 300);
     }
@@ -127,21 +88,13 @@ public class WMAAudio {
         return mediaPlayer;
     }
 
-    public void setMediaPlayer(MediaPlayer mediaPlayer) {
-        this.mediaPlayer = mediaPlayer;
-    }
-
-    public Timer getTimer() {
-        return timer;
-    }
-
-    public void setTimer(Timer timer) {
-        this.timer = timer;
-    }
-
-    public String getFormatedTotalTime(){
+    public String getFormattedTime(){
         int duration = mediaPlayer.getDuration();
 
+        return getFormattedDurationTime(duration);
+    }
+
+    public static String getFormattedDurationTime(int duration){
         return String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(duration), TimeUnit.MILLISECONDS.toSeconds(duration) -
                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
     }
