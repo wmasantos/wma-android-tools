@@ -5,6 +5,8 @@
 ## WMAAudioView
 Fornece um componente de áudio completo e pronto para executar faixas de áudio em MP3
 
+<img src="https://github.com/iFr0z/FabUserLocation/blob/master/test_fab_user_location.gif" width="450" height="800" />
+
 ### Permissões
 Antes de user, precisa liberar as permissões.
 ```xml
