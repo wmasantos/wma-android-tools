@@ -38,6 +38,20 @@
                 audio:downloadTrack="true"
                 audio:backToBegin="true"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="WMAVideoView"
+                android:layout_marginBottom="5dp"/>
+
+            <br.com.wma.tools.widget.WMAVideoView
+                android:id="@+id/ttt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"/>
+
         </LinearLayout>
 
     </ScrollView>
