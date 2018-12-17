@@ -1,20 +1,24 @@
 package br.com.wma.tools;
 
+import android.content.Intent;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import java.io.File;
 
 import br.com.wma.tools.widget.WMAAudioView;
 import br.com.wma.tools.widget.WMAVideoView;
+import br.com.wma.tools.widget.interfaces.OnBackEventListener;
 import br.com.wma.tools.widget.interfaces.OnDeleteEventListener;
 import br.com.wma.tools.widget.interfaces.OnVideoEvents;
 
 public class MainActivity extends AppCompatActivity {
 
     private WMAAudioView wmaAudioView;
-    private WMAVideoView wmaVideoView;
+    private Button btVideo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,21 +52,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadWMAVideoView(){
-        wmaVideoView = findViewById(R.id.ttt);
-        wmaVideoView.loadVídeoStream(this, "https://s3-us-west-2.amazonaws.com/smn-mobile/fanflix/anime/boku-no-hero-s2-ep1.mp4", new OnVideoEvents() {
+        btVideo = findViewById(R.id.btVideo);
+        btVideo.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPrepared() {
-
-            }
-
-            @Override
-            public void onPlaying(int currentTime, String formattedTime) {
-
-            }
-
-            @Override
-            public void onPlayingComplete() {
-
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, VideoActivity.class);
+                startActivity(intent);
             }
         });
     }

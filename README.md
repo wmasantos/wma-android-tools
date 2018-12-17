@@ -1,5 +1,10 @@
 # WMA Android Tools
 
+### Latest Version
+```java
+implementation 'com.github.wmasantos:wma-android-tools:1.0.0'
+```
+
 [1 - WMAAudioView](#WMAAudioView)
 
 ## WMAAudioView

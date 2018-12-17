@@ -19,12 +19,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import br.com.wma.tools.widget.interfaces.OnBackEventListener;
 import br.com.wma.tools.widget.interfaces.OnVideoEvents;
 
 public class WMAVideoView extends LinearLayout {
+    public static final int FORWARD_TIME = 10000;
+    public static final int REPLAY_TIME = 10000;
+
     private Activity activity;
     private String urlStream;
     private OnVideoEvents onVideoEvents;
+    private OnBackEventListener onBackEventListener;
     private Timer timer;
 
     private FrameLayout frameContainer;
@@ -64,10 +69,11 @@ public class WMAVideoView extends LinearLayout {
         tvTotalTime = findViewById(R.id.tvTotalTime);
     }
 
-    public void loadVídeoStream(final Activity act, String urlS, OnVideoEvents onVE){
+    public void loadVídeoStream(final Activity act, String urlS, OnVideoEvents onVE, OnBackEventListener onBack){
         this.activity = act;
         this.urlStream = urlS;
         this.onVideoEvents = onVE;
+        this.onBackEventListener = onBack;
 
         // Seta a URL no videoView
         vwVideoView.setVideoPath(urlStream);
@@ -85,6 +91,7 @@ public class WMAVideoView extends LinearLayout {
 
                 llTransparenceLoad.setVisibility(GONE);
                 llMediaController.setVisibility(VISIBLE);
+                tvTotalTime.setText(getFormatedCurrentTime(vwVideoView.getDuration()));
 
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
@@ -182,6 +189,35 @@ public class WMAVideoView extends LinearLayout {
                     llMediaController.setVisibility(VISIBLE);
             }
         });
+
+        ivBack.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onBackEventListener != null)
+                    onBackEventListener.backPressed();
+            }
+        });
+
+        ivForward.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int forwardTime = vwVideoView.getCurrentPosition() + FORWARD_TIME;
+                vwVideoView.seekTo(forwardTime);
+                skTimeLine.setProgress(forwardTime);
+                tvTimeElapsed.setText(getFormatedCurrentTime(forwardTime));
+            }
+        });
+
+        ivReplay.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int forwardTime = vwVideoView.getCurrentPosition() - REPLAY_TIME;
+                vwVideoView.seekTo(forwardTime);
+                skTimeLine.setProgress(forwardTime);
+                tvTimeElapsed.setText(getFormatedCurrentTime(forwardTime));
+            }
+        });
+
     }
 
     private void play(){
@@ -222,5 +258,16 @@ public class WMAVideoView extends LinearLayout {
 
     public boolean isPlaying(){
         return vwVideoView.isPlaying();
+    }
+
+    private String getFormatedCurrentTime(int duration){
+
+        return String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(duration), TimeUnit.MILLISECONDS.toSeconds(duration) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
+    }
+
+    public void setTitle(String title){
+        if(title != null)
+            tvTitle.setText(String.valueOf(title));
     }
 }
