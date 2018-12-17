@@ -2,6 +2,7 @@ package br.com.wma.tools.widget;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -31,6 +32,8 @@ public class WMAVideoView extends LinearLayout {
     private OnVideoEvents onVideoEvents;
     private OnBackEventListener onBackEventListener;
     private Timer timer;
+    private boolean startOnLoad;
+    private boolean restartVideo;
 
     private FrameLayout frameContainer;
     private VideoView vwVideoView;
@@ -48,11 +51,19 @@ public class WMAVideoView extends LinearLayout {
 
     public WMAVideoView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initComponents(context);
+        initComponents(context, attrs);
     }
 
-    private void initComponents(final Context context){
+    private void initComponents(final Context context, AttributeSet attrs){
         inflate(context, R.layout.layout_wma_videoview, this);
+
+        TypedArray a = context.obtainStyledAttributes(attrs,
+                R.styleable.Video, 0, 0);
+
+        this.startOnLoad = a.getBoolean(R.styleable.Video_startOnLoad, false);
+        this.restartVideo = a.getBoolean(R.styleable.Video_restartVideo, false);
+
+        a.recycle();
 
         frameContainer = findViewById(R.id.frameContainer);
         vwVideoView = findViewById(R.id.vwVideoView);
@@ -69,7 +80,7 @@ public class WMAVideoView extends LinearLayout {
         tvTotalTime = findViewById(R.id.tvTotalTime);
     }
 
-    public void loadVídeoStream(final Activity act, String urlS, OnVideoEvents onVE, OnBackEventListener onBack){
+    public void loadVídeoStream(Activity act, String urlS, OnVideoEvents onVE, OnBackEventListener onBack){
         this.activity = act;
         this.urlStream = urlS;
         this.onVideoEvents = onVE;
@@ -100,7 +111,13 @@ public class WMAVideoView extends LinearLayout {
                         if(timer != null)
                             timer.cancel();
 
-                        mp.seekTo(0);
+                        if(restartVideo){
+                            mp.seekTo(0);
+                            skTimeLine.setProgress(0);
+                            ivPlay.setImageResource(R.drawable.selector_play_n_video);
+                            tvTimeElapsed.setText("00:00");
+                        }
+
                         onVideoEvents.onPlayingComplete();
                     }
                 });
@@ -147,6 +164,9 @@ public class WMAVideoView extends LinearLayout {
                             skTimeLine.setSecondaryProgress((percent * skTimeLine.getMax()) / 100);
                     }
                 });
+
+                if(startOnLoad)
+                    ivPlay.callOnClick();
             }
         });
 
@@ -193,6 +213,7 @@ public class WMAVideoView extends LinearLayout {
         ivBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                pause();
                 if(onBackEventListener != null)
                     onBackEventListener.backPressed();
             }

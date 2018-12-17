@@ -97,7 +97,7 @@ Fornece um componente de vídeo completo e pronto para executar trilhas em MP4 o
 <img src="https://github.com/wmasantos/wma-android-tools/blob/master/pre_loading.png"/> <img src="https://github.com/wmasantos/wma-android-tools/blob/master/video_controller.png"/> <img src="https://github.com/wmasantos/wma-android-tools/blob/master/video.png"/>
 
 ### Permissões
-Antes de usá-la, precisa liberar as permissões.
+Antes de usá-la, precisa liberar a permissão.
 ```xml
 <uses-permission android:name="android.permission.INTERNET"/>
 ```
@@ -113,10 +113,15 @@ Antes de usá-la, precisa liberar as permissões.
     <br.com.wma.tools.widget.WMAVideoView
         android:id="@+id/videoView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        video:startOnLoad="true"
+        video:restartVideo="true"/>
 
 </LinearLayout>
 ```
+
+* video:startOnLoad="true" => Inicia o player automaticamente
+* video:restartVideo="true" => Volta o vídeo para o começo quando terminar
 
 ### Java
 ```java

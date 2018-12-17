@@ -22,7 +22,7 @@ public class VideoActivity extends Activity {
     }
 
     private void loadWMAVideoView(){
-        wmaVideoView = findViewById(R.id.ttt);
+        wmaVideoView = findViewById(R.id.video);
         wmaVideoView.setTitle("Boku no Hero Academia");
         wmaVideoView.loadVídeoStream(this, "https://s3-us-west-2.amazonaws.com/smn-mobile/fanflix/anime/boku-no-hero-s2-ep1.mp4", new OnVideoEvents() {
                     @Override

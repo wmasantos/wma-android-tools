@@ -16,8 +16,7 @@
     </declare-styleable>
 
     <declare-styleable name="Video">
-        <attr name="heightDimension" format="dimension"/>
-        <attr name="enableBack" format="boolean"/>
         <attr name="startOnLoad" format="boolean"/>
+        <attr name="restartVideo" format="boolean"/>
     </declare-styleable>
 </resources>
