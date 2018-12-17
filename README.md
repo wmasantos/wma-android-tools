@@ -5,9 +5,7 @@
 implementation 'com.github.wmasantos:wma-android-tools:1.0.0'
 ```
 
-[1 - WMAAudioView](#WMAAudioView)
-
-[2 - WMAVideoView](#WMAVideoView)
+[1 - WMAAudioView](#WMAAudioView)</br>[2 - WMAVideoView](#WMAVideoView)
 
 ## WMAAudioView
 Fornece um componente de áudio completo e pronto para executar faixas de áudio em MP3
