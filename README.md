@@ -93,8 +93,6 @@ wmaAudioView.addDeleteEvent(new OnDeleteEventListener() {
 });
 ```
 
----
-
 ## WMAVideoView
 Fornece um componente de vídeo completo e pronto para executar trilhas em MP4 ou outras extenções mais conhecidas na web.
 
