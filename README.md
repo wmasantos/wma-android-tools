@@ -4,7 +4,7 @@ Mantenha sua versão da biblioteca sempre atualizada, diversas melhorias em todo
 
 ### Latest Version
 ```java
-implementation 'com.github.wmasantos:wma-android-tools:1.1.0'
+implementation 'com.github.wmasantos:wma-android-tools:1.1.1'
 ```
 
 [1 - WMAAudioView](#WMAAudioView) - (Disponível a partir da versão: 1.0.0)</br>[2 - WMAVideoView](#WMAVideoView) - (Disponível a partir da versão: 1.1.0)
