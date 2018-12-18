@@ -1,5 +1,7 @@
 # WMA Android Tools
 
+Mantenha sua versão da biblioteca sempre atualizada, diversas melhorias em todos os componentes são lançadas frequentemente.
+
 ### Latest Version
 ```java
 implementation 'com.github.wmasantos:wma-android-tools:1.1.0'
