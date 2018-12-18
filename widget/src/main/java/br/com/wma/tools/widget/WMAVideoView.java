@@ -114,6 +114,7 @@ public class WMAVideoView extends LinearLayout {
                         if(restartVideo){
                             mp.seekTo(0);
                             skTimeLine.setProgress(0);
+                            skTimeLine.setSecondaryProgress(0);
                             ivPlay.setImageResource(R.drawable.selector_play_n_video);
                             tvTimeElapsed.setText("00:00");
                         }
