@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 import br.com.wma.tools.widget.interfaces.OnBackEventListener;
 import br.com.wma.tools.widget.interfaces.OnVideoEvents;
 
-public class WMAVideoView extends LinearLayout {
+public class WMAVideoView extends LinearLayout implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnInfoListener {
     public static final int FORWARD_TIME = 10000;
     public static final int REPLAY_TIME = 10000;
 
@@ -95,106 +95,15 @@ public class WMAVideoView extends LinearLayout {
         // Habilita o loading
         llTransparenceLoad.setVisibility(VISIBLE);
 
-        vwVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                onVideoEvents.onPrepared();
+        // Recebe evento do vídeo preparado
+        vwVideoView.setOnPreparedListener(WMAVideoView.this);
 
-                llTransparenceLoad.setVisibility(GONE);
-                llMediaController.setVisibility(VISIBLE);
-                tvTotalTime.setText(getFormatedCurrentTime(vwVideoView.getDuration()));
+        // Recebe evento do vídeo finalizado
+        vwVideoView.setOnCompletionListener(WMAVideoView.this);
 
-                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        mp.pause();
-                        if(timer != null)
-                            timer.cancel();
-
-                        if(restartVideo){
-                            mp.seekTo(0);
-                            skTimeLine.setProgress(0);
-                            skTimeLine.setSecondaryProgress(0);
-                            ivPlay.setImageResource(R.drawable.selector_play_n_video);
-                            tvTimeElapsed.setText("00:00");
-                        }
-
-                        onVideoEvents.onPlayingComplete();
-                    }
-                });
-
-                skTimeLine.setMax(vwVideoView.getDuration());
-
-                skTimeLine.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        if(fromUser) {
-                            vwVideoView.seekTo(progress);
-                            tvTimeElapsed.setText(getFormatedCurrentTime());
-                        }
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-
-                    }
-                });
-
-                ivPlay.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (isPlaying()) {
-                            ivPlay.setImageResource(R.drawable.selector_play_n_video);
-                            pause();
-                        } else {
-                            play();
-                            ivPlay.setImageResource(R.drawable.selector_pause_n_video);
-                        }
-                    }
-                });
-
-                mp.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-                    @Override
-                    public void onBufferingUpdate(MediaPlayer mp, int percent) {
-                        if(((percent * skTimeLine.getMax()) / 100) < skTimeLine.getMax())
-                            skTimeLine.setSecondaryProgress((percent * skTimeLine.getMax()) / 100);
-                    }
-                });
-
-                if(startOnLoad)
-                    ivPlay.callOnClick();
-            }
-        });
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            vwVideoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-                @Override
-                public boolean onInfo(MediaPlayer mediaPlayer, int what, int i1) {
-                    switch(what){
-                        case MediaPlayer.MEDIA_INFO_BUFFERING_START:{
-                            tvBuffering.setVisibility(VISIBLE);
-                            break;
-                        }
-
-                        case MediaPlayer.MEDIA_INFO_BUFFERING_END:{
-                            tvBuffering.setVisibility(GONE);
-                            break;
-                        }
-
-                        case MediaPlayer.MEDIA_INFO_AUDIO_NOT_PLAYING:{
-                            // TODO fazer algo aqui
-                            break;
-                        }
-                    }
-                    return false;
-                }
-            });
-        }
+        // Recebe eventos do buffer
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+            vwVideoView.setOnInfoListener(WMAVideoView.this);
 
         frameContainer.setOnClickListener(new OnClickListener() {
             @Override
@@ -253,7 +162,8 @@ public class WMAVideoView extends LinearLayout {
                 final String formatedTime = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(currentPosition), TimeUnit.MILLISECONDS.toSeconds(currentPosition) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(currentPosition)));
 
-                onVideoEvents.onPlaying(currentPosition, formatedTime);
+                if(onVideoEvents != null)
+                   onVideoEvents.onPlaying(currentPosition, formatedTime);
 
                 activity.runOnUiThread(new Runnable() {
                     @Override
@@ -291,5 +201,101 @@ public class WMAVideoView extends LinearLayout {
     public void setTitle(String title){
         if(title != null)
             tvTitle.setText(String.valueOf(title));
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        if(onVideoEvents != null)
+           onVideoEvents.onPrepared();
+
+        llTransparenceLoad.setVisibility(GONE);
+        llMediaController.setVisibility(VISIBLE);
+        tvTotalTime.setText(getFormatedCurrentTime(vwVideoView.getDuration()));
+
+        skTimeLine.setMax(vwVideoView.getDuration());
+
+        skTimeLine.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(fromUser) {
+                    vwVideoView.seekTo(progress);
+                    tvTimeElapsed.setText(getFormatedCurrentTime());
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        ivPlay.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isPlaying()) {
+                    ivPlay.setImageResource(R.drawable.selector_play_n_video);
+                    pause();
+                } else {
+                    play();
+                    ivPlay.setImageResource(R.drawable.selector_pause_n_video);
+                }
+            }
+        });
+
+        mp.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+            @Override
+            public void onBufferingUpdate(MediaPlayer mp, int percent) {
+                if(((percent * skTimeLine.getMax()) / 100) < skTimeLine.getMax())
+                    skTimeLine.setSecondaryProgress((percent * skTimeLine.getMax()) / 100);
+            }
+        });
+
+        if(startOnLoad)
+            ivPlay.callOnClick();
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        mp.pause();
+        if(timer != null)
+            timer.cancel();
+
+        if(restartVideo){
+            mp.seekTo(0);
+            skTimeLine.setProgress(0);
+            skTimeLine.setSecondaryProgress(0);
+            ivPlay.setImageResource(R.drawable.selector_play_n_video);
+            tvTimeElapsed.setText("00:00");
+        }
+
+        if(onVideoEvents != null)
+           onVideoEvents.onPlayingComplete();
+    }
+
+    @Override
+    public boolean onInfo(MediaPlayer mp, int what, int extra) {
+        switch(what){
+            case MediaPlayer.MEDIA_INFO_BUFFERING_START:{
+                tvBuffering.setVisibility(VISIBLE);
+                break;
+            }
+
+            case MediaPlayer.MEDIA_INFO_BUFFERING_END:{
+                tvBuffering.setVisibility(GONE);
+                break;
+            }
+
+            case MediaPlayer.MEDIA_INFO_AUDIO_NOT_PLAYING:{
+                // TODO fazer algo aqui
+                break;
+            }
+        }
+
+        return false;
     }
 }
