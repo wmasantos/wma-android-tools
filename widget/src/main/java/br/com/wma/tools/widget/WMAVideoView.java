@@ -132,7 +132,7 @@ public class WMAVideoView extends LinearLayout implements MediaPlayer.OnPrepared
             public void onClick(View v) {
                 pause();
                 if(onBackEventListener != null)
-                    onBackEventListener.backPressed();
+                   onBackEventListener.backPressed();
             }
         });
 
