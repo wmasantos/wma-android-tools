@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import br.com.wma.tools.widget.WMAVideoView;
+import br.com.wma.tools.widget.entity.ResumeOpeningVideoEntity;
 import br.com.wma.tools.widget.interfaces.OnBackEventListener;
 import br.com.wma.tools.widget.interfaces.OnVideoEvents;
 
@@ -24,7 +25,7 @@ public class VideoActivity extends Activity {
     private void loadWMAVideoView(){
         wmaVideoView = findViewById(R.id.video);
         wmaVideoView.setTitle("Boku no Hero Academia");
-        wmaVideoView.loadVídeoStream(this, "https://s3-us-west-2.amazonaws.com/smn-mobile/fanflix/anime/boku-no-hero-s2-ep1.mp4", new OnVideoEvents() {
+        wmaVideoView.loadVídeoStream(this, "https://s3-us-west-2.amazonaws.com/smn-mobile/fanflix/anime/boku-no-hero-s2-ep1.mp4", new ResumeOpeningVideoEntity(5000, 45000), new OnVideoEvents() {
                     @Override
                     public void onPrepared() {
                         System.out.println("PREPAROU");

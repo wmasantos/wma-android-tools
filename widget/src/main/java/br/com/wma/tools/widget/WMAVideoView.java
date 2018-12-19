@@ -20,6 +20,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import br.com.wma.tools.exception.WMAException;
+import br.com.wma.tools.widget.entity.ResumeOpeningVideoEntity;
 import br.com.wma.tools.widget.interfaces.OnBackEventListener;
 import br.com.wma.tools.widget.interfaces.OnVideoEvents;
 
@@ -34,6 +36,7 @@ public class WMAVideoView extends LinearLayout implements MediaPlayer.OnPrepared
     private Timer timer;
     private boolean startOnLoad;
     private boolean restartVideo;
+    private ResumeOpeningVideoEntity resumeOpeningProperties;
 
     private FrameLayout frameContainer;
     private VideoView vwVideoView;
@@ -45,9 +48,11 @@ public class WMAVideoView extends LinearLayout implements MediaPlayer.OnPrepared
     private ImageView ivForward;
     private TextView tvTitle;
     private TextView tvBuffering;
+    private TextView tvSkipOpening;
     private SeekBar skTimeLine;
     private TextView tvTimeElapsed;
     private TextView tvTotalTime;
+    private boolean skipeCalled = false;
 
     public WMAVideoView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -75,16 +80,18 @@ public class WMAVideoView extends LinearLayout implements MediaPlayer.OnPrepared
         ivForward = findViewById(R.id.ivForward);
         tvTitle = findViewById(R.id.tvTitle);
         tvBuffering = findViewById(R.id.tvBuffering);
+        tvSkipOpening = findViewById(R.id.tvSkipOpening);
         skTimeLine = findViewById(R.id.skTimeLine);
         tvTimeElapsed = findViewById(R.id.tvTimeElapsed);
         tvTotalTime = findViewById(R.id.tvTotalTime);
     }
 
-    public void loadVídeoStream(Activity act, String urlS, OnVideoEvents onVE, OnBackEventListener onBack){
+    public void loadVídeoStream(Activity act, String urlS, ResumeOpeningVideoEntity resOpProperties, OnVideoEvents onVE, OnBackEventListener onBack){
         this.activity = act;
         this.urlStream = urlS;
         this.onVideoEvents = onVE;
         this.onBackEventListener = onBack;
+        this.resumeOpeningProperties = resOpProperties;
 
         // Seta a URL no videoView
         vwVideoView.setVideoPath(urlStream);
@@ -170,6 +177,7 @@ public class WMAVideoView extends LinearLayout implements MediaPlayer.OnPrepared
                     public void run() {
                         skTimeLine.setProgress(currentPosition);
                         tvTimeElapsed.setText(formatedTime);
+                        onResumeVideo(resumeOpeningProperties);
                     }
                 });
             }
@@ -255,6 +263,16 @@ public class WMAVideoView extends LinearLayout implements MediaPlayer.OnPrepared
             }
         });
 
+        tvSkipOpening.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int newCurrent = resumeOpeningProperties.getEndAt() + 3000;
+
+                vwVideoView.seekTo(newCurrent);
+                skTimeLine.setProgress(newCurrent);
+            }
+        });
+
         if(startOnLoad)
             ivPlay.callOnClick();
     }
@@ -297,5 +315,48 @@ public class WMAVideoView extends LinearLayout implements MediaPlayer.OnPrepared
         }
 
         return false;
+    }
+
+    private void onResumeVideo(ResumeOpeningVideoEntity resOpProperties){
+
+        int duration = vwVideoView.getDuration();
+        int currentPosition = vwVideoView.getCurrentPosition();
+
+        if(resOpProperties == null) {
+            System.out.println("Nenhum parametro informado");
+            return;
+        }
+
+        if(resOpProperties.getStartAt() > duration || resOpProperties.getEndAt() > duration) {
+            System.out.println("Valor informado não pode ser maior que duração total");
+            return;
+        }
+
+        if(resOpProperties.getStartAt() <= 0 || resOpProperties.getEndAt() <= 0) {
+            System.out.println("Valor informado não pode ser menor que zero");
+            return;
+        }
+
+        if(resOpProperties.getStartAt() >= resOpProperties.getEndAt()) {
+            System.out.println("Início deve ser menor que fim");
+            return;
+        }
+
+        if(currentPosition > resOpProperties.getStartAt() && currentPosition < resOpProperties.getEndAt()){
+            if(!tvSkipOpening.isShown()){
+                Animation in = AnimationUtils.loadAnimation(activity, R.anim.fade_in);
+                tvSkipOpening.setAnimation(in);
+                in.start();
+                tvSkipOpening.setVisibility(VISIBLE);
+            }
+        }
+        else{
+            if(tvSkipOpening.isShown()){
+                Animation out = AnimationUtils.loadAnimation(activity, R.anim.fade_out);
+                tvSkipOpening.setAnimation(out);
+                out.start();
+                tvSkipOpening.setVisibility(GONE);
+            }
+        }
     }
 }

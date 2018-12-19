@@ -82,6 +82,20 @@
                 android:clickable="true"
                 android:focusable="true"/>
 
+            <TextView
+                android:id="@+id/tvSkipOpening"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PULAR ABERTURA"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:padding="10dp"
+                android:layout_gravity="top|end"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/selector_skip_opening"
+                android:visibility="gone"/>
+
         </FrameLayout>
 
         <SeekBar

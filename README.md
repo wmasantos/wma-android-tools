@@ -130,7 +130,7 @@ Antes de usá-la, precisa liberar a permissão.
 WMAVideoView wmaVideoView;
 wmaVideoView = findViewById(R.id.videoView);
 wmaVideoView.setTitle("Boku no Hero Academia");
-wmaVideoView.loadVídeoStream(this, "https://s3-us-west-2.amazonaws.com/smn-mobile/fanflix/anime/boku-no-hero-s2-ep1.mp4", new OnVideoEvents() {
+wmaVideoView.loadVídeoStream(this, "https://s3-us-west-2.amazonaws.com/smn-mobile/fanflix/anime/boku-no-hero-s2-ep1.mp4", new ResumeOpeningVideoEntity(5000, 45000), new OnVideoEvents() {
             @Override
             public void onPrepared() {
                 System.out.println("PREPAROU");
