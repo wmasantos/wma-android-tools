@@ -6,8 +6,11 @@ Mantenha sua versão da biblioteca sempre atualizada, diversas melhorias em todo
 ```java
 implementation 'com.github.wmasantos:wma-android-tools:1.1.1'
 ```
-
+### Componentes
 [1 - WMAAudioView](#WMAAudioView) - (Disponível a partir da versão: 1.0.0)</br>[2 - WMAVideoView](#WMAVideoView) - (Disponível a partir da versão: 1.1.0)
+
+### Utilitários
+[1 - WMAUtilities](#WMAUtilities) - (Disponível a partir da versão: 1.0.0)
 
 ## WMAAudioView
 Fornece um componente de áudio completo e pronto para executar faixas de áudio em MP3
@@ -153,4 +156,12 @@ wmaVideoView.loadVídeoStream(this, "https://s3-us-west-2.amazonaws.com/smn-mobi
             }
         }
 );
+```
+
+## WMAUtilities
+Fornece um conjunto de métodos que servem como base auxiliadora para a construção dos componentes desta mesma biblioteca.
+
+"isStoragePermissionGranted" - Verifica se o dispositivo possui permissão para ler e escrever no sistema de arquivos.
+```java
+WMAUtilities.isStoragePermissionGranted(context);
 ```

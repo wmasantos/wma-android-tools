@@ -39,6 +39,11 @@ public class WMAUtilities {
         return nf.parse(value).doubleValue();
     }
 
+    /**
+     * Metodo retorna se o dispositivo possui permissão para ler e escrever no sistema de arquivos.
+     * @param context
+     * @return true se tiver permissão, falso caso contrário.
+     */
     public static boolean isStoragePermissionGranted(Context context) {
         if (Build.VERSION.SDK_INT >= 23) {
             if (context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
