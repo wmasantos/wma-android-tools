@@ -165,3 +165,11 @@ Fornece um conjunto de métodos que servem como base auxiliadora para a constru�
 ```java
 WMAUtilities.isStoragePermissionGranted(context);
 ```
+"isRecordAudioPermissionGranted" - Verifica se o dispositivo possui permissão para utilizar o gravador de audio do dispositivo.
+```java
+WMAUtilities.isRecordAudioPermissionGranted(context);
+```
+"createDirectory" - Metodo que cria um diretório e seus parentes na sequencia.
+```java
+WMAUtilities.createDirectory(directory, context);
+```

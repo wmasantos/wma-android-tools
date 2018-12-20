@@ -40,7 +40,7 @@ public class WMAUtilities {
     }
 
     /**
-     * Metodo retorna se o dispositivo possui permissão para ler e escrever no sistema de arquivos.
+     * Metodo verifica se o dispositivo possui permissão para ler e escrever no sistema de arquivos.
      * @param context
      * @return true se tiver permissão, falso caso contrário.
      */
@@ -62,6 +62,11 @@ public class WMAUtilities {
         }
     }
 
+    /**
+     * Metodo verifica se o dispositivo possui permissão para utilizar o gravador de audio do dispositivo.
+     * @param context
+     * @return true se tiver permissão, falso caso contrário.
+     */
     public static boolean isRecordAudioPermissionGranted(Context context) {
         if (Build.VERSION.SDK_INT >= 23) {
             if (context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
@@ -79,23 +84,12 @@ public class WMAUtilities {
         }
     }
 
-    public static void createDirectory(String directoryPath, Context context) throws WMAException {
-        boolean checkPermission = isStoragePermissionGranted(context);
-        if(!checkPermission)
-            throw new WMAException("Você não possui permissão para criar/ler arquivos!");
-
-        File directory = new File(directoryPath);
-
-        if(!directory.isDirectory())
-            throw new WMAException("O Caminho informado não é um diretório!");
-
-        if(!directory.exists()) {
-            boolean resultDir = directory.mkdir();
-            if(!resultDir)
-                throw new WMAException("Não foi possível criar o diretório: " + "\'" + directoryPath + "\'");
-        }
-    }
-
+    /**
+     * Metodo que cria um diretório e seus parentes na sequencia.
+     * @param directory caminho final do diretório
+     * @param context
+     * @throws WMAException
+     */
     public static void createDirectory(File directory, Context context) throws WMAException {
         boolean checkPermission = isStoragePermissionGranted(context);
         if(!checkPermission)
