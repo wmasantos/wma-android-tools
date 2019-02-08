@@ -19,4 +19,8 @@
         <attr name="startOnLoad" format="boolean"/>
         <attr name="restartVideo" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="Dropdown">
+
+    </declare-styleable>
 </resources>

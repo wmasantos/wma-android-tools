@@ -58,6 +58,14 @@
                 android:textColor="#FFFFFF"
                 android:background="@drawable/selector_primary_button"/>
 
+            <br.com.wma.tools.widget.WMADropdownView
+                android:id="@+id/wmaDropdownView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"/>
+
         </LinearLayout>
 
     </ScrollView>
