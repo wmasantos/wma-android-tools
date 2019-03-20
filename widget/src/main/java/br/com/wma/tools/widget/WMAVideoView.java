@@ -37,7 +37,6 @@ public class WMAVideoView extends LinearLayout implements MediaPlayer.OnPrepared
     private boolean startOnLoad;
     private boolean restartVideo;
     private ResumeOpeningVideoEntity resumeOpeningProperties;
-
     private FrameLayout frameContainer;
     private VideoView vwVideoView;
     private LinearLayout llMediaController;
