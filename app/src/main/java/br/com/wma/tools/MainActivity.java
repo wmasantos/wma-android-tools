@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         loadWMADropdownView();
     }
 
+
+
+
+
     private void loadWMAAudioView(){
         wmaAudioView = findViewById(R.id.avAudioView);
         wmaAudioView.readyToPlayForStreamAsync(
